@@ -30,9 +30,9 @@ Navigate your ship through a procedurally generated cave corridor. Keep the ship
 
 | Constant | Value | Description |
 |----------|-------|-------------|
-| GRAVITY | 800 | Downward acceleration (px/s²) |
-| THRUST_IMPULSE | -1200 | Upward acceleration while held (px/s²) |
-| MAX_VELOCITY | 600 | Maximum fall/rise speed (px/s) |
+| GRAVITY | 880 | Downward acceleration (px/s²) |
+| THRUST_IMPULSE | -1320 | Upward acceleration while held (px/s²) |
+| MAX_VELOCITY | 660 | Maximum fall/rise speed (px/s) |
 | BASE_SPEED | 180 | Initial scroll speed (px/s) |
 | SPEED_INCREASE | 0.3 | Speed increase per second |
 | INITIAL_GAP | 300 | Starting corridor gap height (px) |

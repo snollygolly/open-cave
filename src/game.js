@@ -5,10 +5,10 @@ import { UIManager } from "./ui.js";
 import { createPRNG, clamp, signedNoise, createPool } from "./utils.js";
 
 // Game constants
-const GRAVITY = 800;
-// Make thrust stronger than gravity when held
-const THRUST_IMPULSE = -1200;
-const MAX_VELOCITY = 600;
+// Slightly snappier handling (~10% more acceleration)
+const GRAVITY = 880; // was 800
+const THRUST_IMPULSE = -1320; // was -1200
+const MAX_VELOCITY = 660; // was 600
 const BASE_SPEED = 180;
 const SPEED_INCREASE = 0.3;
 const INITIAL_GAP = 300;
@@ -177,6 +177,12 @@ class Game {
 		
 		// Generate new cave
 		this.generateInitialCave();
+
+		// Start centered in the current cave gap at the ship's X
+		const startSegment = this.getCaveSegmentAt(this.ship.x);
+		if (startSegment) {
+			this.ship.y = startSegment.centerY;
+		}
 	}
 	
 	generateInitialCave() {
