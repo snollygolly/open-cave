@@ -14,7 +14,11 @@ const SPEED_INCREASE = 0.3;
 const INITIAL_GAP = 300;
 const MIN_GAP = 120;
 const GAP_SHRINK_RATE = 2;
-const PILLAR_FREQUENCY = 0.003;
+const PILLAR_FREQUENCY = 0.003; // randomness gate for spawn once spacing allows
+// Pillar spacing starts wide (fewer pillars), tightens slowly over time
+const BASE_PILLAR_MIN_SPACING = 200; // px between pillars at start (~50% fewer vs 100)
+const MIN_PILLAR_MIN_SPACING = 140;  // lower bound as difficulty ramps
+const SPACING_REDUCTION_RATE = 1.5;  // px per second reduction
 const SHIP_RADIUS = 8;
 const CAVE_SEGMENT_WIDTH = 20;
 const VIRTUAL_HEIGHT = 720;
@@ -287,8 +291,13 @@ class Game {
 		const spawnX = this.camera.x + this.gameWidth;
 		const lastPillar = this.world.pillars[this.world.pillars.length - 1];
 		const minDistance = lastPillar ? spawnX - lastPillar.x : Infinity;
+		const gameTime = this.stateManager.getGameTime();
+		const requiredSpacing = Math.max(
+			MIN_PILLAR_MIN_SPACING,
+			BASE_PILLAR_MIN_SPACING - gameTime * SPACING_REDUCTION_RATE
+		);
 		
-		if (minDistance > 100 && this.prng() < PILLAR_FREQUENCY * this.world.speed) {
+		if (minDistance > requiredSpacing && this.prng() < PILLAR_FREQUENCY * this.world.speed) {
 			const segment = this.getCaveSegmentAt(spawnX);
 			if (segment) {
 				const fromTop = this.prng() < 0.5;
@@ -302,9 +311,11 @@ class Game {
 				pillar.fromTop = fromTop;
 				
 				if (fromTop) {
-					pillar.y = segment.centerY - segment.gapHeight / 2 - pillarHeight;
+					// Nudge 15% farther into the gap (down)
+					pillar.y = segment.centerY - segment.gapHeight / 2 - pillarHeight + pillarHeight * 0.15;
 				} else {
-					pillar.y = segment.centerY + segment.gapHeight / 2;
+					// Nudge 15% farther into the gap (up)
+					pillar.y = segment.centerY + segment.gapHeight / 2 - pillarHeight * 0.15;
 				}
 				
 				this.world.pillars.push(pillar);
