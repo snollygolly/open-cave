@@ -1,6 +1,6 @@
 # Open Cave
 
-A minimalist SFCave-style side-scrolling game built with PixiJS and Vite.
+A minimalist SFCave-style side-scrolling game built with PixiJS and Vite
 
 ## How to Run
 
